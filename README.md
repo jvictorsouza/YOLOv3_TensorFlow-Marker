@@ -1,6 +1,6 @@
 ## Yolo marker
 
-![screenshot](https://user-images.githubusercontent.com/19287934/67440616-3e601e00-f5d0-11e9-9804-7780635fbd51.png)
+![screenshot](./screen.png)
 
 ### Install virtualenv via pip:
 pip install virtualenv
@@ -21,7 +21,7 @@ virtualenv .env -p python3 --no-site-packages
 pip install -r requirements.txt
 
 ### Run the application
-python3 marker.py -p \"PATH_WITH_IMGS/*EXTENSION\" -d WIDTH HEIGHT\
+python3 marker.py -p \"PATH_WITH_IMGS/*EXTENSION\" -d WIDTH HEIGHT\ -m MERGE_FLAG-TXT_IMAGES(OPTIONAL)
 Eg.:  python3 marker.py -p \"/Users/leandrobmarinho/img/\*.png\" -d 1920 1080
 
 #### If you are done working in the virtual environment for the moment, you can deactivate it:

@@ -13,8 +13,8 @@ class_selected = 0
 regions = list()
 file_pos = 0
 NUM_IMGS = 0
-MAX_WIDTH = 1280
-MAX_HEIGHT = 800
+MAX_WIDTH = 1920
+MAX_HEIGHT = 1080
 
 
 '''---------------------------------------------------------------------------------------------------------'''
@@ -56,6 +56,8 @@ def draw_info(image):
     cv2.putText(image, 'Q (quit)', (10, pos_y + 115), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
 
 def save_regions(image_path, regions, dimensions):
+    global index, merge
+
     # Replace jpg path to read txt file
 
     filename, file_extension = os.path.splitext(image_path)
@@ -68,6 +70,12 @@ def save_regions(image_path, regions, dimensions):
     if regions:
         print('\nSaving ... {}'.format(regions))
         file = open(file_path, 'w')
+        if merge == True:
+            merge_data = open('merge_data.txt', 'a')
+            if index != 0:
+                merge_data.write('\n')
+            merge_data.write('{} ./data/my_data/images/{} {} {}'.format(index, image_path.split('/')[1], dimensions[1], dimensions[0]))
+            index += 1
         for region in regions:
 
             width = region['region'][1][0] - region['region'][0][0]
@@ -81,7 +89,12 @@ def save_regions(image_path, regions, dimensions):
             # print('<{} {} {} {} {}>'.format(region['class'], (region['region'][0][0] + (width/2)), (region['region'][0][1] + (height/2)), width, height))
 
             file.write('{} {:6f} {:6f} {:6f} {:6f}\n'.format(region['class'], Yolo_x, Yolo_y, Yolo_width, Yolo_height))
-
+            if merge == True:
+                merge_data.write(
+                    ' {} {} {} {} {}'.format(region['class'], region['region'][0][0], region['region'][0][1],
+                                             region['region'][1][0], region['region'][1][1]))
+        if merge == True:
+            merge_data.close()
         file.close()
 
 
@@ -268,14 +281,22 @@ def print_regions(drag=False):
 
 
 if __name__ == '__main__':
+    global index, merge
+    index = 0
+
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-p", "--path", required=True, help="Path to the image.", type=str)
     ap.add_argument('-d', '--dimension', required=True, nargs=2, help='Max width and height to show the image.', type=int)
+    ap.add_argument('-m', '--merge', required=False, help="Merge all txt-images.", type=bool, default=False)
     args = vars(ap.parse_args())
 
     MAX_WIDTH = args['dimension'][0]
     MAX_HEIGHT = args['dimension'][1]
+    merge = args['merge']
+    if merge == True:
+        merge_data = open('merge_data.txt', 'w')
+        merge_data.close()
 
     # Image path list
     files = natsorted(glob.glob(args['path']))

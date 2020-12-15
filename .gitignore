@@ -1,5 +1,15 @@
 .*
-imgs/*.txt
+*.txt
+#imgs/*.txt
 pip-selfcheck.json
 test.txt
 train.txt
+.idea
+*.avi
+*.mp4
+*.mkv
+*.wmv
+*.jpg
+*.jpeg
+*.png
+*.tiff

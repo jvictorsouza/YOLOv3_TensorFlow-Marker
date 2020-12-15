@@ -1,1 +1,0 @@
-0 ./data/my_data/images/val 1265 840 1 455 216 747 772

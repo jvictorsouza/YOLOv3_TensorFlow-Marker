@@ -3,6 +3,7 @@ import cv2, glob, os, argparse, math
 
 from random import randint
 from natsort import natsorted
+import shutil
 
 # initialize the list of reference points and boolean indicating
 # whether cropping is being performed or not
@@ -52,8 +53,9 @@ def draw_info(image):
     cv2.putText(image, 'N (next)', (10, pos_y + 55), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
     cv2.putText(image, 'R (reset)', (10, pos_y + 70), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
     cv2.putText(image, 'L (last reset)', (10, pos_y + 85), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
-    cv2.putText(image, 'C (cursor reset)', (10, pos_y + 100), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
+    cv2.putText(image, 'S (select reset)', (10, pos_y + 100), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
     cv2.putText(image, 'Q (quit)', (10, pos_y + 115), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
+    cv2.putText(image, 'C (copy past regions)', (10, pos_y + 130), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
 
 def save_regions(image_path, regions, dimensions):
     global index, merge
@@ -379,8 +381,8 @@ if __name__ == '__main__':
                 if len(regions) > 0:
                     save_regions(files[file_pos], regions, image.shape)
 
-        # if the 'c' key is pressed, reset the cursor cropping regions
-        if key == ord("c"):
+        # if the 's' key is pressed, reset the cursor cropping regions
+        if key == ord("s"):
             if len(regions) > 0:
                 image = read_img(files[file_pos])
 
@@ -406,6 +408,13 @@ if __name__ == '__main__':
                 if len(regions) > 0:
                     save_regions(files[file_pos], regions, image.shape)
 
+        # if the 'c' key is pressed, the regions of past frame is add to actua frame
+        if key == ord("c"):
+            filename, file_extension = os.path.splitext(files[file_pos])
+            if file_pos >= 0:
+                past_path = files[file_pos-1].replace(file_extension, ".txt")
+                present_path = file_path = files[file_pos].replace(file_extension, ".txt")
+                shutil.copy(past_path, present_path)
         # if the 'q' key is pressed, break from the loop
         if key == ord("q"):
             break

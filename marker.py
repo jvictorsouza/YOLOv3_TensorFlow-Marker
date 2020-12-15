@@ -4,6 +4,7 @@ import cv2, glob, os, argparse, math
 from random import randint
 from natsort import natsorted
 import shutil
+import time
 
 # initialize the list of reference points and boolean indicating
 # whether cropping is being performed or not
@@ -55,7 +56,7 @@ def draw_info(image):
     cv2.putText(image, 'L (last reset)', (10, pos_y + 85), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
     cv2.putText(image, 'S (select reset)', (10, pos_y + 100), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
     cv2.putText(image, 'Q (quit)', (10, pos_y + 115), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
-    cv2.putText(image, 'C (copy past regions)', (10, pos_y + 130), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
+    cv2.putText(image, 'C (copy past regions and skip frame)', (10, pos_y + 130), font, 0.5, (255, 255, 255), 1, cv2.LINE_8)
 
 def save_regions(image_path, regions, dimensions):
     global index, merge
@@ -372,7 +373,7 @@ if __name__ == '__main__':
                 filename, file_extension = os.path.splitext(files[file_pos])
                 file_path = files[file_pos].replace(file_extension, ".txt")
                 # file_path = files[file_pos].replace("jpg", "txt")
-                
+
                 if os.path.isfile(file_path):
                     os.remove(file_path)
 
@@ -410,12 +411,28 @@ if __name__ == '__main__':
 
         # if the 'c' key is pressed, the regions of past frame is add to actua frame
         if key == ord("c"):
-            print('Copying past region')
-            filename, file_extension = os.path.splitext(files[file_pos])
-            if file_pos >= 0:
-                past_path = files[file_pos-1].replace(file_extension, ".txt")
-                present_path = file_path = files[file_pos].replace(file_extension, ".txt")
-                shutil.copy(past_path, present_path)
+            if file_pos != 0:
+                print('Copying past region')
+                filename, file_extension = os.path.splitext(files[file_pos])
+                if file_pos >= 0:
+                    past_path = files[file_pos-1].replace(file_extension, ".txt")
+                    present_path = file_path = files[file_pos].replace(file_extension, ".txt")
+                    try:
+                        shutil.copy(past_path, present_path)
+
+                        read_markers(files[file_pos], image.shape)
+                        draw_info(image)
+                        cv2.imshow("image", image)
+                        key = cv2.waitKey(500)
+
+                        if file_pos + 1 < NUM_IMGS:
+                            file_pos = file_pos + 1
+                            image = read_img(files[file_pos])
+                            read_markers(files[file_pos], image.shape)
+                    except FileNotFoundError:
+                        print('Frame past have 0 regions marked. Please mark frame past')
+            else: print('Please insert a region on first frame and skip to next frame')
+
         # if the 'q' key is pressed, break from the loop
         if key == ord("q"):
             break

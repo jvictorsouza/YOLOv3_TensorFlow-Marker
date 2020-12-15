@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 ### Run the application
 python3 marker.py -p "PATH_WITH_IMGS/*EXTENSION\" -d WIDTH HEIGHT\ -m MERGE_FLAG-TXT_IMAGES(OPTIONAL)
-Eg.:  python3 marker.py -p "demo/train/*.jpg" -d 1920 1080 -m true
+Eg.:  python3 marker.py -p "demo/train/*.jpg" -d 1920 1080 -m false
 
 #### If you are done working in the virtual environment for the moment, you can deactivate it:
 deactivate

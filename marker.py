@@ -386,7 +386,7 @@ if __name__ == '__main__':
             if len(regions) > 0:
                 image = read_img(files[file_pos])
 
-                print('Cleaning cursor region')
+                print('Cleaning selection region')
                 x_c,y_c = cursorPt
                 cursorRegions = []
                 for region in regions:
@@ -410,6 +410,7 @@ if __name__ == '__main__':
 
         # if the 'c' key is pressed, the regions of past frame is add to actua frame
         if key == ord("c"):
+            print('Copying past region')
             filename, file_extension = os.path.splitext(files[file_pos])
             if file_pos >= 0:
                 past_path = files[file_pos-1].replace(file_extension, ".txt")

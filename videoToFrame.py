@@ -2,11 +2,24 @@ import numpy as np
 import cv2
 import os
 
+try:
+    os.mkdir('videoToFrame')
+    try:
+        os.mkdir('videoToFrame/frames')
+        os.mkdir('videoToFrame/videos')
+    except:
+        print("\tSub-directories already created")
+except:
+    print("\tDirectory videoToFrame already created")
+
 base_path_videos = 'videoToFrame/videos/'
 base_path_frames = 'videoToFrame/frames/'
 
 for (rootDir, dirNames, filenames) in os.walk(base_path_videos):
         # loop over the filenames in the current directory
+        if len(filenames) == 0:
+            print('[INFO] NO VIDEOS DETECTED IN FOLDER: videoToFrame/videos')
+            break
         for filename in filenames:
             filename_folder, _ = filename.split('.')
             print('[INFO] Opennig %s' % filename)

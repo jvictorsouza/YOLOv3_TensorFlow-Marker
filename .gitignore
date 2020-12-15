@@ -2,8 +2,6 @@
 *.txt
 #imgs/*.txt
 pip-selfcheck.json
-test.txt
-train.txt
 .idea
 *.avi
 *.mp4
@@ -13,3 +11,4 @@ train.txt
 *.jpeg
 *.png
 *.tiff
+*.zip

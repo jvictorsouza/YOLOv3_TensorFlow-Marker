@@ -35,7 +35,7 @@ for (rootDir, dirNames, filenames) in os.walk(base_path_videos):
                 # cv2.imshow('frame',frame)
                 if frame_count % 1 == 0:
                     try:
-                        cv2.imwrite(base_path_frames+filename_folder+'/frame_{}.png'.format(frame_save), frame)
+                        cv2.imwrite(base_path_frames+filename_folder+'/'+filename+'-frame_{}.png'.format(frame_save), frame)
                         frame_save += 1
                     except:
                         cap.release()

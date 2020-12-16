@@ -33,7 +33,7 @@ for (rootDir, dirNames, filenames) in os.walk(base_path_videos):
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 # cv2.imshow('frame',frame)
-                if frame_count % 1 == 0:
+                if frame_count % 2 == 0:
                     try:
                         cv2.imwrite(base_path_frames+filename_folder+'/'+filename+'-frame_{}.png'.format(frame_save), frame)
                         frame_save += 1

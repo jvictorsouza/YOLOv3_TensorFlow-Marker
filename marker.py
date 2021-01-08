@@ -43,9 +43,9 @@ def draw_info(image):
     cv2.putText(image,'Selected: {}'.format(class_selected),(10,20), font, 0.5, class_colours[class_selected],1, cv2.LINE_AA)
 
     pos_y = 40
-    for i in range(0, len(class_colours)):
-        cv2.putText(image, '{} - {}'.format(i, list_class[i]), (10, pos_y), font, 0.5, class_colours[i], 1, cv2.LINE_4)
-        pos_y = pos_y + 15
+    # for i in range(0, len(class_colours)):
+    #     cv2.putText(image, '{} - {}'.format(i, list_class[i]), (10, pos_y), font, 0.5, class_colours[i], 1, cv2.LINE_4)
+    #     pos_y = pos_y + 15
 
     cv2.rectangle(image, (7,pos_y+13), (95,pos_y+30), (138, 136, 142), cv2.FILLED)
     cv2.putText(image,'{} of {}'.format(file_pos+1, NUM_IMGS),(10,pos_y+25), font, 0.5, (255, 255, 255),1, cv2.LINE_8)
@@ -76,8 +76,9 @@ def save_regions(image_path, regions, dimensions):
         if merge == True:
             merge_data = open('merge_data.txt', 'a')
             if index != 0:
-                merge_data.write('\n')
-            merge_data.write('{} ./data/my_data/images/{} {} {}'.format(index, image_path.split('/')[1], dimensions[1], dimensions[0]))
+                # merge_data.write('\n')
+                merge_data.write('.\n')
+            # merge_data.write('{} ./data/my_data/images/{} {} {}'.format(index, image_path.split('/')[1], dimensions[1], dimensions[0]))
             index += 1
         for region in regions:
 
@@ -93,9 +94,12 @@ def save_regions(image_path, regions, dimensions):
 
             file.write('{} {:6f} {:6f} {:6f} {:6f}\n'.format(region['class'], Yolo_x, Yolo_y, Yolo_width, Yolo_height))
             if merge == True:
-                merge_data.write(
-                    ' {} {} {} {} {}'.format(region['class'], region['region'][0][0], region['region'][0][1],
-                                             region['region'][1][0], region['region'][1][1]))
+                # merge_data.write(' {} {} {} {} {}'.format(region['class'], region['region'][0][0], region['region'][0][1],
+                #                              region['region'][1][0], region['region'][1][1]))
+                merge_data.write('{} {} {} {} {}-'.format(region['region'][0][0], region['region'][0][1] + height,
+                                              region['region'][1][0], region['region'][1][1] - height,
+                                              region['class']))
+
         if merge == True:
             merge_data.close()
         file.close()
@@ -300,7 +304,7 @@ if __name__ == '__main__':
     if merge == True:
         merge_data = open('merge_data.txt', 'w')
         merge_data.close()
-
+    print(args['path'])
     # Image path list
     files = natsorted(glob.glob(args['path']))
     NUM_IMGS = len(files)

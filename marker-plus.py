@@ -35,11 +35,13 @@ for i, line in enumerate(f):
     list_class.append(line)
 f.close()
 
-
-for (rootDir, dirNames, filenames) in os.walk('examples_imgs_classes'):
-    exampleClasses = filenames
-exampleClasses.sort()
-
+try:
+    for (rootDir, dirNames, filenames) in os.walk('examples_imgs_classes'):
+        exampleClasses = filenames
+    exampleClasses.sort()
+except NameError as error:
+    print("\nA pasta examples_imgs_classes nao contem nenhuma imagem exemplo de classes.")
+    exit()
 # len_lista = len(list_class)
 len_lista = len(exampleClasses)
 for i in range(len_lista):
